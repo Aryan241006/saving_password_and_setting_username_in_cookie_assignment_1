@@ -6,18 +6,36 @@ document.addEventListener('DOMContentLoaded', function() {
     return cookie ? cookie.split('=')[1] : null;
   }
 
-  // Function to set a cookie
+  // Function to set a cookie with a given name, value, and expiration (in days)
   function setCookie(name, value, daysToExpire) {
     let date = new Date();
     date.setTime(date.getTime() + daysToExpire * 24 * 60 * 60 * 1000);
-    document.cookie =
-      name + '=' + value + ';expires=' + date.toUTCString() + ';path=/';
+    document.cookie = name + '=' + value + ';expires=' + date.toUTCString() + ';path=/';
   }
 
   // 1. Get the value of the 'count' cookie
-  // 2. If the cookie exists, increment the value and update the cookie
-  // 3. If the cookie does not exist, create it and set the value to 1
-  // 4. Display the count on the webpage
+  let count = getCookie('count');
 
-  // your code here
+  // 2. If the cookie exists, increment the value; if not, initialize it to 1
+  if (count) {
+    count = parseInt(count) + 1;
+  } else {
+    count = 1;
+  }
+
+  // 3. Update the 'count' cookie (setting it to expire in 7 days)
+  setCookie('count', count, 7);
+
+  // 4. Display the count on the webpage.
+  // Check if an element with id "countDisplay" exists.
+  let displayElement = document.getElementById('countDisplay');
+  if (displayElement) {
+    displayElement.textContent = count;
+  } else {
+    // If no such element exists, create one and append it to the body.
+    let p = document.createElement('p');
+    p.textContent = 'You have visited this page ' + count + ' times.';
+    document.body.appendChild(p);
+  }
 });
+
